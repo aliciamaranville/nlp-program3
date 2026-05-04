@@ -46,11 +46,13 @@ def context_window(tokens, target_word, n):
 class NBEnsemble:
     """Naive Bayes ensemble over multiple context window sizes."""
 
-    def __init__(self, target_word, window_sizes=(2, 5, 10, 25)):
+    def __init__(self, target_word, alpha, window_sizes=(2, 5, 10, 25), stopwords=False):
         self.target_word = target_word          # word to disambiguate
         self.window_sizes = list(window_sizes)  # different context sizes that will be used
+        self.alpha = alpha                      # alpha for classifier
         self.vectorizers = {}                   # stores a CountVectorizer per window size
         self.classifiers = {}                   # stores one NB classifier per window size
+        self.stopwords = stopwords              # stopwords to remove
 
     def windowed_texts(self, sentences, n):
         """
@@ -85,10 +87,12 @@ class NBEnsemble:
 
             texts = self.windowed_texts(sentences, n) # preprocess
             # convert to bag of words
-            vec = CountVectorizer()
+            # if removing stopwords, remove them in vectorizer
+            if self.stopwords: vec = CountVectorizer(stop_words="english")
+            else: vec = CountVectorizer()
             X = vec.fit_transform(texts)
 
-            clf = MultinomialNB() # classifier
+            clf = MultinomialNB(alpha=self.alpha) # classifier
             clf.fit(X, labels) # fit classifier
 
             # save vectorizer/classifier for this n

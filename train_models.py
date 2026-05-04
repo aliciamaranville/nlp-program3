@@ -77,7 +77,9 @@ if __name__ == "__main__":
         print(f"- {len(sentences)} sentences: {n1} for sense 1, {n2} for sense2")
 
         # train model on data and save
-        model = NBEnsemble(word).fit(sentences, labels)
+        alpha = 0.1 if word != "rubbish" else 0.5
+        stopwords = True if word == "overtime" else False
+        model = NBEnsemble(word, alpha=alpha, stopwords=stopwords).fit(sentences, labels)
         out = os.path.join("models", f"{word}_model.pkl")
         with open(out, "wb") as f:
             pickle.dump(model, f)

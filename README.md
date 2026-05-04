@@ -7,4 +7,4 @@ Directory:
 - `train_models.py`: Script to train the ML tools
 - `cs5322f25prog3.py`: Script that generates results by disambiguating each word.
 - `results.py`: Generates the result text files using functions from `cs5322f25prog3.py`
--  `cs5322report.pdf`: PDF report detailing the method for classification
+-  `NLP_Program_3.pdf`: PDF report detailing the method for classification
